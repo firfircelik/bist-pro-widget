@@ -1,11 +1,11 @@
 {
-  "name": "BIST Pro v2 — Çok Zaman Dilimli Rehber",
-  "short_name": "BIST Pro v2",
+  "name": "BIST Pro v4 — Hisse + Kripto",
+  "short_name": "BIST Pro v4",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0f1115",
   "theme_color": "#0f1115",
-  "description": "BIST için teknik özet, gelişmiş grafik, piyasa saati, risk/Monte Carlo, izleme listesi, işlem günlüğü. (Eğitsel)",
+  "description": "BIST ve Kripto için çok zaman dilimli rehber: Screener Top 20, Strateji Lab (MTF + Breakout/ATR), bildirimli uyarılar.",
   "icons": [
     {
       "src": "icons/icon-192.png",
@@ -16,20 +16,6 @@
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "XU100",
-      "url": "./?sym=BIST:XU100"
-    },
-    {
-      "name": "THYAO",
-      "url": "./?sym=BIST:THYAO"
-    },
-    {
-      "name": "ASELS",
-      "url": "./?sym=BIST:ASELS"
     }
   ]
 }

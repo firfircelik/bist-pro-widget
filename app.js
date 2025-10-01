@@ -27,10 +27,10 @@ const qsa = (s, el=document) => Array.from(el.querySelectorAll(s));
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const roundToTick = (x, tick) => Math.round(x / tick) * tick;
 function saveState() {
-  localStorage.setItem('bp_symbol', state.symbol);
-  localStorage.setItem('bp_timeframe', state.timeframe);
-  localStorage.setItem('bp_watchlist', JSON.stringify(state.watchlist));
-  localStorage.setItem('bp_settings', JSON.stringify(state.settings));
+  for (const key in state) {
+    const value = state[key];
+    localStorage.setItem(`bp_${key}`, typeof value === 'object' ? JSON.stringify(value) : value);
+  }
 }
 
 // ----- Market Clock -----

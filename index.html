@@ -1,16 +1,14 @@
 
-<!-- Hacktoberfest Sample PR Change -->
 <!doctype html>
 <html lang="tr" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BIST Pro v2 — Çok Zaman Dilimli Rehber (Eğitsel)</title>
-  <meta name="description" content="BIST için çok zaman dilimli teknik özet, gelişmiş grafik, piyasa saati, risk/Monte Carlo, işlem günlüğü, PWA — Mac & iPhone." />
-  <!-- iOS/PWA -->
+  <title>BIST Pro v4 — Hisse + Kripto (Eğitsel)</title>
+  <meta name="description" content="BIST ve Kripto için çok zaman dilimli rehber: Screener Top 20, Strateji Lab (MTF + Breakout/ATR), geri bildirimli uyarılar, PWA." />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="BIST Pro v2">
+  <meta name="apple-mobile-web-app-title" content="BIST Pro v4">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0f1115" />
@@ -18,7 +16,7 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">BIST Pro v2 <span class="sub">— Çok Zaman Dilimli Rehber</span></div>
+    <div class="brand">BIST Pro v4 <span class="sub">— Hisse + Kripto</span></div>
     <nav class="nav">
       <button id="installBtn" class="btn ghost" hidden>Yükle</button>
       <button id="themeBtn" class="btn ghost" title="Tema">🌗</button>
@@ -28,94 +26,81 @@
   </header>
 
   <main class="container">
-    <!-- Piyasa saati + durum -->
+
+    <!-- Market Switch -->
     <section class="card">
-      <div class="section-title">Piyasa Saati & Durum</div>
-      <div class="market-clock">
-        <div class="clock-row">
-          <div><b>Durum:</b> <span id="mktStatus">—</span></div>
-          <div><b>Şimdi (IST):</b> <span id="nowIST">—</span></div>
-          <div><b>Geri Sayım:</b> <span id="countdown">—</span></div>
-        </div>
-        <div class="clock-row small muted">
-          <div>Seans 1: <span id="sess1">—</span></div>
-          <div>Ara: <span id="break">—</span></div>
-          <div>Seans 2: <span id="sess2">—</span></div>
-        </div>
+      <div class="section-title">Pazar</div>
+      <div class="seg" role="tablist" aria-label="Pazar">
+        <button data-mkt="BIST" class="active">BIST</button>
+        <button data-mkt="CRYPTO">Kripto</button>
       </div>
-      <p class="muted">Seans saatleri değişebilir; bu saatler ayarlanabilir. Resmî duyurulara göre güncelleyiniz.</p>
+      <p class="muted">BIST için sembol biçimi <code>BIST:THYAO</code>; Kripto için <code>BINANCE:BTCUSDT</code> veya sadece <code>BTCUSDT</code>.</p>
     </section>
 
-    <!-- Kontrol Paneli -->
+    <!-- Top 20 -->
+    <section class="card">
+      <div class="section-title">Top 20</div>
+      <div class="seg" role="tablist" aria-label="Top20">
+        <button class="active" data-screen="top_gainers">Yükselenler</button>
+        <button data-screen="top_losers">Düşenler</button>
+        <button data-screen="volume_leaders">Hacim</button>
+        <button data-screen="most_volatile">Volatil</button>
+      </div>
+      <div id="screenerWrap" class="screener-wrap"></div>
+      <div class="muted foot" id="screenerNote"></div>
+    </section>
+
+    <!-- Sembol & Zaman -->
     <section class="card">
       <div class="section-title">Sembol & Zaman Dilimi</div>
       <div class="controls">
-        <input id="symbolInput" type="text" list="bist-list" placeholder="Örn: BIST:THYAO" value="BIST:XU100" aria-label="BIST sembolü" />
-        <datalist id="bist-list">
-          <option value="BIST:XU100"></option>
-          <option value="BIST:THYAO"></option>
-          <option value="BIST:ASELS"></option>
-          <option value="BIST:GARAN"></option>
-          <option value="BIST:AKBNK"></option>
-          <option value="BIST:TUPRS"></option>
-          <option value="BIST:BIMAS"></option>
-          <option value="BIST:SISE"></option>
-          <option value="BIST:KCHOL"></option>
-          <option value="BIST:FROTO"></option>
-          <option value="BIST:EREGL"></option>
-          <option value="BIST:HEKTS"></option>
-          <option value="BIST:PETKM"></option>
-        </datalist>
-
+        <input id="symbolInput" type="text" list="bist-list" placeholder="Örn: BIST:THYAO veya BTCUSDT" value="BIST:XU100" aria-label="Sembol" />
+        <datalist id="bist-list"></datalist>
         <div class="seg" role="tablist" aria-label="Görünüm">
           <button class="active" data-ival="1D" aria-selected="true">Günlük</button>
-          <button data-ival="1h" aria-selected="false">Saatlik</button>
-          <button data-ival="5m" aria-selected="false">5 Dak</button>
-          <button data-ival="1m" aria-selected="false">1 Dak</button>
+          <button data-ival="1h">Saatlik</button>
+          <button data-ival="5m">5 Dak</button>
+          <button data-ival="1m">1 Dak</button>
         </div>
-
         <button class="btn" id="applyBtn">Uygula</button>
         <button class="btn" id="addWatch">İzlemeye Ekle</button>
         <button class="btn ghost" id="openSettings">Ayarlar</button>
       </div>
-      <p class="muted">İpucu: BIST sembollerini <code>BIST:THYAO</code> gibi yazın. Endeks için <code>BIST:XU100</code>.</p>
     </section>
 
-    <!-- 3 sütun profesyonel görünüm -->
+    <!-- Teknik özet + Grafik -->
     <section class="grid3">
-      <div class="card">
-        <div class="section-title">Teknik Özet — 1D</div>
-        <div id="tv-tech-1d"></div>
-      </div>
-      <div class="card">
-        <div class="section-title">Teknik Özet — 1h</div>
-        <div id="tv-tech-1h"></div>
-      </div>
-      <div class="card">
-        <div class="section-title">Teknik Özet — 1m</div>
-        <div id="tv-tech-1m"></div>
-      </div>
-      <div class="card wide">
-        <div class="section-title">Grafik (TradingView — gelişmiş)</div>
-        <div id="tv-adv-chart"></div>
-      </div>
+      <div class="card"><div class="section-title">Teknik Özet — 1D</div><div id="tv-tech-1d"></div></div>
+      <div class="card"><div class="section-title">Teknik Özet — 1h</div><div id="tv-tech-1h"></div></div>
+      <div class="card"><div class="section-title">Teknik Özet — 1m</div><div id="tv-tech-1m"></div></div>
+      <div class="card wide"><div class="section-title">Gelişmiş Grafik</div><div id="tv-adv-chart"></div></div>
     </section>
 
+    <!-- Strategy Lab -->
+    <section class="card">
+      <div class="section-title">Strateji Lab — MTF Uyumu + Breakout/ATR</div>
+      <div class="kv">
+        <label>MTF Ayarı<select id="stMTF"><option value="D-H-5m" selected>1D trend + 1h momentum + 5m breakout</option></select></label>
+        <label>ATR Katsayı (Stop)<input id="stATR" type="number" step="0.1" value="1.5"></label>
+        <label>Hızlı Backtest Aralığı<select id="stRange"><option value="1mo">1 Ay</option><option value="3mo" selected>3 Ay</option><option value="6mo">6 Ay</option></select></label>
+      </div>
+      <div class="controls">
+        <button id="stAnalyze" class="btn">Analiz Et</button>
+        <button id="stBacktest" class="btn ghost">Hızlı Backtest</button>
+        <button id="stAlert" class="btn">Kuralla Bildirim</button>
+      </div>
+      <div id="stOut" class="out"></div>
+      <canvas id="stChart" width="900" height="280" class="chart"></canvas>
+    </section>
+
+    <!-- Watchlist + Risk -->
     <section class="grid2">
-      <!-- İzleme Listesi -->
       <div class="card">
         <div class="section-title">İzleme Listem</div>
-        <div class="watch-actions">
-          <button id="wlExport" class="btn ghost">Dışa Aktar (CSV)</button>
-          <label class="btn ghost filelabel">İçe Aktar (CSV)<input id="wlImport" type="file" accept=".csv" hidden></label>
-        </div>
         <ul id="watchlist" class="watch"></ul>
-        <div class="muted">Bir sembole tıklayınca o sembole geçilir. Sağdaki çarpı ile kaldırabilirsiniz.</div>
       </div>
-
-      <!-- Risk Yönetimi + Pozisyon Boyutu -->
       <div class="card">
-        <div class="section-title">Risk Yönetimi Hesaplayıcı</div>
+        <div class="section-title">Risk Hesaplayıcı</div>
         <div class="kv">
           <label>Hesap (TRY)<input id="equity" type="number" min="0" step="10" value="1000"></label>
           <label>Risk / İşlem (%)<input id="riskPct" type="number" min="0.1" step="0.1" value="1.0"></label>
@@ -125,59 +110,40 @@
           <label>Adım (Tick) (TRY)<input id="tick" type="number" min="0.01" step="0.01" value="0.01"></label>
         </div>
         <div id="riskOut" class="out"></div>
-        <p class="foot">Lot ve fiyat <b>tick</b> adımına yuvarlanır. Bu bir eğitim aracıdır; yatırım tavsiyesi değildir.</p>
       </div>
     </section>
 
-    <!-- Monte Carlo + Beklenti -->
+    <!-- Midas Hızlı Emir -->
     <section class="card">
-      <div class="section-title">Monte Carlo (Bileşik büyüme simülasyonu)</div>
-      <div class="kv mc">
-        <label>Başlangıç (TRY)<input id="mcEquity" type="number" min="0" step="50" value="1000"></label>
-        <label>Risk / İşlem (%)<input id="mcRisk" type="number" min="0.1" step="0.1" value="1.0"></label>
-        <label>Kazanma Oranı (%)<input id="mcWin" type="number" min="0" max="100" step="1" value="45"></label>
-        <label>Ödül/Risk (R)<input id="mcRR" type="number" min="0.1" step="0.1" value="1.5"></label>
-        <label>İşlem Sayısı<input id="mcN" type="number" min="1" step="10" value="100"></label>
-        <label>Koşu (simülasyon) adedi<input id="mcRuns" type="number" min="100" step="100" value="2000"></label>
+      <div class="section-title">Midas Hızlı Emir (Manuel)</div>
+      <div class="kv">
+        <label>Yön<select id="mdSide"><option>AL</option><option>SAT</option></select></label>
+        <label>Adet/Lot<input id="mdQty" type="number" step="1" value="1"></label>
+        <label>Tür<select id="mdType"><option>Limit</option><option>Piyasa</option></select></label>
+        <label>Fiyat<input id="mdPx" type="number" step="0.01" value="0"></label>
+        <label>Not<input id="mdNote" type="text" placeholder="(opsiyonel)"></label>
       </div>
       <div class="controls">
-        <button class="btn" id="mcRun">Simülasyonu Çalıştır</button>
-        <button class="btn ghost" id="mcReset">Sıfırla</button>
+        <button id="mdCopy" class="btn">Emri Kopyala</button>
+        <a id="mdLink" class="btn ghost" href="https://www.getmidas.com/midas-kripto/" target="_blank" rel="noopener">Midas Kripto'yu Aç</a>
       </div>
-      <div id="mcOut" class="out"></div>
-      <canvas id="mcChart" width="800" height="280" class="chart"></canvas>
-      <p class="foot">Basit model: Kazançta sermaye × (1 + risk% × R), kayıpta sermaye × (1 − risk%). Sonuçlar istatistikseldir, garantilemez.</p>
+      <p class="muted">Midas, şu an halka açık bir alım-satım API'sı paylaşmıyor. Bu bölüm, emri kopyalayıp uygulamada <b>manuel</b> girmeniz için tasarlanmıştır.</p>
     </section>
 
-    <!-- İşlem Günlüğü + İstatistik + Eğri -->
+    <!-- Uyarılar -->
     <section class="card">
-      <div class="section-title">İşlem Günlüğü (Yerel) & İstatistikler</div>
-      <div class="journal-inp">
-        <input id="jnl-date" type="datetime-local">
-        <input id="jnl-symbol" type="text" placeholder="BIST:THYAO">
-        <select id="jnl-side"><option>Long</option><option>Short</option></select>
-        <input id="jnl-entry" type="number" step="0.01" placeholder="Giriş">
-        <input id="jnl-stop" type="number" step="0.01" placeholder="Stop">
-        <input id="jnl-target" type="number" step="0.01" placeholder="Hedef">
-        <input id="jnl-risk" type="number" step="0.01" placeholder="Risk (TRY)">
-        <input id="jnl-result" type="number" step="0.01" placeholder="Sonuç (TRY)">
-        <input id="jnl-notes" type="text" placeholder="Notlar">
-        <button id="jnl-add" class="btn">Ekle</button>
-        <button id="jnl-export" class="btn ghost">CSV Dışa Aktar</button>
-        <label class="btn ghost filelabel">CSV İçe Aktar<input id="jnl-import" type="file" accept=".csv" hidden></label>
-        <button id="jnl-clear" class="btn danger">Temizle</button>
+      <div class="section-title">Bildirimler (Web Push)</div>
+      <div class="controls">
+        <button id="subPush" class="btn">Bildirimlere Abone Ol</button>
+        <button id="testPush" class="btn ghost">Test Bildirim</button>
       </div>
-      <div class="stats grid4" id="jnl-stats"></div>
-      <div class="table-wrap">
-        <table id="jnl-table" class="tbl">
-          <thead><tr>
-            <th>Tarih</th><th>Sembol</th><th>Yön</th><th>Giriş</th><th>Stop</th><th>Hedef</th><th>Risk</th><th>Sonuç</th><th>Not</th><th></th>
-          </tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <canvas id="eqChart" width="800" height="280" class="chart"></canvas>
-      <p class="foot">Veriler cihazınızda saklanır (<code>localStorage</code>). İstatistikler: Kazanç oranı, ort. kazanç/kayıp, <i>expectancy</i>, max drawdown.</p>
+      <div class="muted">Ayarlar’dan Sunucu URL + VAPID Public Key girin. iOS için 16.4+ ve Ana Ekrana Ekle gereklidir.</div>
+    </section>
+
+    <!-- Uyarı -->
+    <section class="card">
+      <div class="section-title">Uyarı & Sorumluluk Reddi</div>
+      <p class="muted">Bu uygulama <b>eğitim amaçlıdır</b>, <b>yatırım tavsiyesi değildir</b>. Veriler gecikmeli/eksik olabilir. Kurallar ve seans saatleri değişebilir; resmî kaynakları takip ediniz.</p>
     </section>
 
     <!-- Ayarlar Modal -->
@@ -186,23 +152,15 @@
         <h3>Ayarlar</h3>
         <div class="grid2">
           <div>
-            <h4>Seans Saatleri (IST)</h4>
-            <label>Açılış (Seans 1) <input id="setOpen1" type="time" value="10:00"></label>
-            <label>Öğle Arası Başlangıç <input id="setBreakStart" type="time" value="13:00"></label>
-            <label>Öğle Arası Bitiş <input id="setBreakEnd" type="time" value="14:00"></label>
-            <label>Kapanış (Seans 2) <input id="setClose2" type="time" value="18:00"></label>
+            <h4>Genel</h4>
+            <label>Tema <select id="setTheme"><option value="dark" selected>Koyu</option><option value="light">Açık</option></select></label>
+            <label>Tick Adımı (TRY) <input id="setTick" type="number" step="0.01" value="0.01"></label>
+            <label>Zaman Dilimi <select id="setTZ"><option value="Europe/Istanbul" selected>Europe/Istanbul</option><option value="local">Cihaz Saati</option></select></label>
           </div>
           <div>
-            <h4>Genel</h4>
-            <label>Tick Adımı (TRY) <input id="setTick" type="number" step="0.01" value="0.01"></label>
-            <label>Zaman Dilimi <select id="setTZ">
-              <option value="Europe/Istanbul" selected>Europe/Istanbul</option>
-              <option value="local">Cihaz Saati</option>
-            </select></label>
-            <label>Tema <select id="setTheme">
-              <option value="dark" selected>Koyu</option>
-              <option value="light">Açık</option>
-            </select></label>
+            <h4>Push Sunucu</h4>
+            <label>Sunucu URL <input id="setServer" type="url" placeholder="https://sizin-sunucu.com"></label>
+            <label>VAPID Public Key <input id="setVapid" type="text" placeholder="BP... (Base64)"></label>
           </div>
         </div>
         <div class="modal-actions">
@@ -212,18 +170,10 @@
       </form>
     </dialog>
 
-    <!-- Uyarı -->
-    <section class="card">
-      <div class="section-title">Uyarı & Sorumluluk Reddi</div>
-      <p class="muted">
-        Kısa vadede sermayeyi “katlama” hedefi çok yüksek risk içerir. Bu uygulama <b>eğitim amaçlıdır</b>, <b>yatırım tavsiyesi değildir</b>.
-        Seans saatleri ve piyasa kuralları değişebilir; işlemden önce resmî kaynakları kontrol ediniz.
-      </p>
-    </section>
   </main>
 
   <footer class="footbar">
-    <span>© 2025 BIST Pro v2 — PWA</span>
+    <span>© 2025 BIST Pro v4 — PWA</span>
     <span>Kişisel kullanım içindir.</span>
   </footer>
 

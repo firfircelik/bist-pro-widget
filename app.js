@@ -1,15 +1,26 @@
 
 /* BIST Pro v2 — App logic (PWA, Clock, TradingView embeds, Risk & Monte Carlo, Journal, Watchlist, Settings) */
+const loadStateItem = (key, defaultValue) => {
+  const item = localStorage.getItem(`bp_${key}`);
+  if (item === null) return defaultValue;
+  try {
+    return JSON.parse(item);
+  } catch (e) {
+    return item;
+  }
+};
+
 const state = {
-  symbol: localStorage.getItem('bp_symbol') || 'BIST:XU100',
-  timeframe: localStorage.getItem('bp_timeframe') || '1D',
-  watchlist: JSON.parse(localStorage.getItem('bp_watchlist') || '["BIST:XU100","BIST:THYAO","BIST:ASELS","BIST:GARAN","BIST:AKBNK","BIST:TUPRS"]'),
-  settings: JSON.parse(localStorage.getItem('bp_settings') || JSON.stringify({
+  symbol: loadStateItem('symbol', 'BIST:XU100'),
+  timeframe: loadStateItem('timeframe', '1D'),
+  watchlist: loadStateItem('watchlist', ["BIST:XU100","BIST:THYAO","BIST:ASELS","BIST:GARAN","BIST:AKBNK","BIST:TUPRS"]),
+  settings: loadStateItem('settings', {
     tick: 0.01,
     tz: 'Europe/Istanbul',
     theme: 'dark',
     sessions: {open1:'10:00', breakStart:'13:00', breakEnd:'14:00', close2:'18:00'}
-  })),
+  }),
+  market: loadStateItem('market', 'BIST'),
 };
 
 // ----- Theme -----

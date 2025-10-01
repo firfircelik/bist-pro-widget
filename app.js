@@ -23,6 +23,29 @@ const state = {
   market: loadStateItem('market', 'BIST'),
 };
 
+// Dynamically load watchlist from bist-tickers.json
+async function loadBistTickers() {
+  try {
+    const response = await fetch('./data/bist-tickers.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    // Assuming bist-tickers.json is an array of objects with a 'symbol' property
+    const symbols = data.map(item => item.symbol);
+    if (symbols.length > 0) {
+      state.watchlist = symbols;
+      saveState();
+      renderWatchlist();
+    }
+  } catch (e) {
+    console.error('Failed to load bist-tickers.json:', e);
+    // Fallback to hardcoded watchlist already in state
+  }
+}
+
+loadBistTickers();
+
 // ----- Theme -----
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', state.settings.theme || 'dark');
